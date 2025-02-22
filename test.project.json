@@ -1,0 +1,22 @@
+{
+  "name": "Automaton",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "Packages": {
+        "$path": "packages",
+
+        "Automaton": {
+          "$path": "src"
+        }
+      }
+    },
+
+    "ServerScriptService": {
+      "Server": {
+        "$path": "test"
+      }
+    }
+  }
+}
