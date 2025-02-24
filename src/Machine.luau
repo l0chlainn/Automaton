@@ -92,9 +92,9 @@ function Machine.change(self: Machine, toState: string): ()
 
     if table.find(self._states, toState) then
         local fromState = self.state
-        self.stateChanging:trigger(toState, fromState)
+        self.stateChanging:fire(toState, fromState)
         self.state = toState
-        self.stateChanged:trigger(toState, fromState)
+        self.stateChanged:fire(toState, fromState)
     else
         -- this should maybe be an error instead,
         -- but further consideration must be made.
@@ -102,7 +102,7 @@ function Machine.change(self: Machine, toState: string): ()
     end
 end
 
-function Machine.trigger(self: Machine, event: string, ...: any): ()
+function Machine.fire(self: Machine, event: string, ...: any): ()
     if not isMachine(self) then
         error(`expected Machine for self, got '{typeof(self)}'`, 2)
     elseif type(event) ~= "string" then
