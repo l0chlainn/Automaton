@@ -35,41 +35,20 @@ local function isMachine(value: any): boolean
 end
 
 local function createMachine(initial: string, transitions: {transition}): Machine
-    if type(initial) ~= "string" then
-        error(`expected string for initial, got '{typeof(initial)}'`, 2)
-    elseif type(transitions) ~= "table" then
-        error(`expected table for transitions, got '{typeof(transitions)}'`, 2)
-    end
-
     local states = {initial}
     local listenersMap = {}
     for index, transition in transitions do
-        if type(transition) ~= "table" then
-            error(`expected table for transitions[{index}], got '{typeof(transition)}'`, 2)
+        local toState = transition.toState
+        if not table.find(states, toState) then
+            table.insert(states, toState)
         end
 
         local event = transition.event
-        local toState = transition.toState
-        local fromStates = transition.fromStates
-        local condition = transition.condition
-        if type(event) ~= "string" then
-            error(`expected string for transitions[{index}].event, got '{typeof(event)}'`, 2)
-        elseif type(toState) ~= "string" then
-            error(`expected string for transitions[{index}].toState, got '{typeof(toState)}'`, 2)
-        elseif type(fromStates) ~= "table" then
-            error(`expected table for transitions[{index}].fromStates, got '{typeof(fromStates)}'`, 2)
-        elseif condition ~= nil and type(condition) ~= "function" then
-            error(`expected function for transitions[{index}].condition, got '{typeof(condition)}'`, 2)
-        end
-
         local listeners = listenersMap[event]
         if listeners then
             table.insert(listeners, transition)
         else
             listenersMap[event] = {transition}
-        end
-        if not table.find(states, toState) then
-            table.insert(states, toState)
         end
     end
 
@@ -84,31 +63,15 @@ local function createMachine(initial: string, transitions: {transition}): Machin
 end
 
 function Machine.change(self: Machine, toState: string): ()
-    if not isMachine(self) then
-        error(`expected Machine for self, got '{typeof(self)}'`, 2)
-    elseif type(toState) ~= "string" then
-        error(`expected string for toState, got '{typeof(toState)}'`, 2)
-    end
-
     if table.find(self._states, toState) then
         local fromState = self.state
         self.stateChanging:fire(toState, fromState)
         self.state = toState
         self.stateChanged:fire(toState, fromState)
-    else
-        -- this should maybe be an error instead,
-        -- but further consideration must be made.
-        warn(`attempted to change to an invalid state '{toState}'`)
     end
 end
 
 function Machine.fire(self: Machine, event: string, ...: any): ()
-    if not isMachine(self) then
-        error(`expected Machine for self, got '{typeof(self)}'`, 2)
-    elseif type(event) ~= "string" then
-        error(`expected string for event, got '{typeof(event)}'`, 2)
-    end
-
     local listeners = self._listenersMap[event]
     if listeners then
         local fromState = self.state
