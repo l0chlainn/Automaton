@@ -5,7 +5,7 @@
 
     "ReplicatedStorage": {
       "Packages": {
-        "$path": "packages",
+        "$path": "packages/shared",
 
         "Automaton": {
           "$path": "src"

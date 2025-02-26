@@ -1,10 +1,6 @@
 --!strict
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
-local Packages = ReplicatedStorage:FindFirstChild("Packages")
-
-local Signal = require(Packages:FindFirstChild("Signal"))
+local Signal = require(script.Parent.Parent:FindFirstChild("Signal"))
 
 local Event = Signal.Event
 
