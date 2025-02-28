@@ -1,16 +1,6 @@
 {
   "name": "Automaton",
   "tree": {
-    "$className": "DataModel",
-
-    "ReplicatedStorage": {
-      "Packages": {
-        "$path": "packages/shared",
-
-        "Automaton": {
-          "$path": "src"
-        }
-      }
-    }
+    "$path": "src"
   }
 }
